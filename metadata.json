@@ -1,0 +1,5 @@
+{
+  "name": "ESI Charge-State Deconvolution Animator",
+  "description": "Interactive 2D scientific animation and production-ready Python Manim (v0.20+) script visualizing charge-state deconvolution in electrospray ionization mass spectrometry.",
+  "requestFramePermissions": [],
+}
