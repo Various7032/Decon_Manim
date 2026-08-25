@@ -4,7 +4,7 @@ This is a simple visual aid to help explain the mathematical principles of Elect
 
 ---
 
-##Running Offline on Your Laptop
+## Running Offline on Your Laptop
 
 This application runs locally with zero external network or database dependencies.
 
