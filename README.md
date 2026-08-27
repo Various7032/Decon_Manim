@@ -1,12 +1,12 @@
-# ESI-MS Charge-State Deconvolution Visualizer
+# ESI Mass Spectrum Charge-State Deconvolution Visualizer
 
-This is a simple visual aid to help explain the mathematical principles of Electrospray Ionization (ESI-MS) charge deconvolution.
+An interactive 60fps educational canvas and Manim animation generator explaining the mathematical principles of Electrospray Ionization (ESI-MS) charge deconvolution, constructive multi-peak mass co-resonance, and harmonic alias structures (1/2 and 2x).
 
 ---
 
-## Running Offline on Your Laptop
+## 🚀 Running Offline on Your Laptop
 
-This application runs locally with zero external network or database dependencies.
+This application runs **100% locally in your browser** with zero external network or database dependencies.
 
 ### 1. Prerequisites
 - Install **Node.js** (version 18 or higher) from [nodejs.org](https://nodejs.org/).
@@ -40,6 +40,8 @@ cd ~/Downloads/esi-deconvolution-visualizer
 cd C:\Users\YourUsername\Downloads\esi-deconvolution-visualizer
 ```
 
+> 💡 **Tip:** Type `cd ` (with a space) in your terminal and drag-and-drop the project folder from your file manager straight into the terminal window, then hit `Enter`.
+
 #### Verify you are in the correct directory:
 Run:
 ```bash
@@ -59,7 +61,7 @@ From the project root directory, run:
 ```bash
 npm install
 ```
-This downloads all necessary local packages into a local `node_modules` folder on your device.
+This downloads all necessary local packages (React, Vite, Lucide icons, Tailwind) into a local `node_modules` folder on your laptop. Once this finishes, your laptop no longer needs internet access!
 
 ---
 
@@ -83,16 +85,16 @@ You will see output similar to:
 
 ### 5. Open in Browser
 
-Open your browser and navigate to:
+Open your favorite web browser (Chrome, Firefox, Safari, Edge) and navigate to:
 ```
 http://localhost:3000
 ```
 
-All animations, playback controls, preset switchers, mathematical breakdowns, and the Manim script export run offline on your device.
+All animations, playback controls, preset switchers, mathematical breakdowns, and the Manim script export run **entirely offline** on your machine.
 
 ---
 
-### Optional: Production Build & Static Offline Viewing
+### 📦 Optional: Production Build & Static Offline Viewing
 
 If you want a compiled, ultra-fast static build:
 ```bash
@@ -103,7 +105,7 @@ Open `http://localhost:3000` to interact with the production build.
 
 ---
 
-## Project Structure & Making Edits
+## 🛠️ Project Structure & Making Edits
 
 | File / Folder | Purpose |
 | :--- | :--- |
