@@ -1,79 +1,47 @@
 import { MoleculePreset, Peak } from '../types';
 
 export const PROTON_MASS = 1.007825; // Da
-export const SODIUM_MASS = 22.989769; // Da
 
 export const MOLECULE_PRESETS: MoleculePreset[] = [
   {
-    id: 'antibody_lc',
-    name: 'Reduced Antibody Light Chain (Prompt Target)',
-    description: 'Target molecule from prompt (~24,000 Da), ideal for showing high-charge state ESI envelopes.',
-    mass: 24000.0,
+    id: 'nist_mab_lc',
+    name: 'NIST mAb Light Chain',
+    description: 'Reduced NISTmAb light chain standard (23,126 Da, +10 to +25 charge envelope).',
+    mass: 23126.0,
     defaultZMin: 10,
     defaultZMax: 25,
-    centerZ: 17,
-    sigmaZ: 3.0,
-    mzMin: 800,
-    mzMax: 2600,
-    massAxisMin: 5000,
-    massAxisMax: 75000,
-  },
-  {
-    id: 'myoglobin',
-    name: 'Horse Heart Myoglobin',
-    description: 'Standard ESI calibration protein with intact heme (16,951.5 Da).',
-    mass: 16951.5,
-    defaultZMin: 12,
-    defaultZMax: 24,
     centerZ: 18,
-    sigmaZ: 2.5,
-    mzMin: 650,
-    mzMax: 1600,
-    massAxisMin: 4000,
-    massAxisMax: 50000,
+    sigmaZ: 2.8,
+    mzMin: 800,
+    mzMax: 4000,
+    massAxisMax: 60000,
   },
   {
-    id: 'bsa',
-    name: 'Bovine Serum Albumin (BSA)',
-    description: 'Medium protein (~66,430 Da) with broad charge envelope spanning 35+ charge states.',
-    mass: 66430.0,
-    defaultZMin: 35,
-    defaultZMax: 60,
-    centerZ: 47,
+    id: 'nist_mab_hc',
+    name: 'NIST mAb Heavy Chain',
+    description: 'Reduced NISTmAb heavy chain standard (50,599 Da, +15 to +45 charge envelope).',
+    mass: 50599.0,
+    defaultZMin: 15,
+    defaultZMax: 45,
+    centerZ: 30,
     sigmaZ: 4.5,
-    mzMin: 1000,
-    mzMax: 2000,
-    massAxisMin: 20000,
-    massAxisMax: 150000,
+    mzMin: 800,
+    mzMax: 4000,
+    massAxisMax: 120000,
   },
   {
-    id: 'ubiquitin',
-    name: 'Ubiquitin',
-    description: 'Small regulatory protein (~8,565 Da) commonly used in structural biology.',
-    mass: 8565.0,
-    defaultZMin: 6,
-    defaultZMax: 13,
-    centerZ: 9,
-    sigmaZ: 1.6,
-    mzMin: 600,
-    mzMax: 1600,
-    massAxisMin: 2000,
-    massAxisMax: 30000,
-  },
-  {
-    id: 'intact_igg',
-    name: 'Intact Monoclonal Antibody (IgG1)',
-    description: 'Large therapeutic antibody (~148,000 Da) in native or denaturing conditions.',
-    mass: 148000.0,
+    id: 'nist_mab_intact',
+    name: 'NIST mAb Intact',
+    description: 'Intact therapeutic IgG1 monoclonal antibody (148,199 Da, +40 to +80 charge envelope).',
+    mass: 148199.0,
     defaultZMin: 40,
-    defaultZMax: 65,
-    centerZ: 52,
-    sigmaZ: 5.0,
-    mzMin: 2200,
-    mzMax: 3800,
-    massAxisMin: 50000,
-    massAxisMax: 300000,
-  }
+    defaultZMax: 80,
+    centerZ: 60,
+    sigmaZ: 6.5,
+    mzMin: 800,
+    mzMax: 4000,
+    massAxisMax: 320000,
+  },
 ];
 
 export function calculateObservedMz(mass: number, z: number, adductMass: number = PROTON_MASS): number {
@@ -85,28 +53,32 @@ export function calculateMassFromMz(mz: number, z: number, adductMass: number = 
 }
 
 export function calculateChargeFromAdjacent(mz1: number, mz2: number, adductMass: number = PROTON_MASS): number {
-  // Assuming mz1 > mz2, so z1 = z2 - 1
+  // Assuming mz1 > mz2 (so z1 = z2 - 1)
   // z2 = (mz1 - adductMass) / (mz1 - mz2)
   const z = (mz1 - adductMass) / (mz1 - mz2);
   return Math.round(z);
 }
 
 export function generatePeaksForPreset(
-  preset: MoleculePreset,
+  mass: number,
   adductMass: number = PROTON_MASS,
-  zMin: number = preset.defaultZMin,
-  zMax: number = preset.defaultZMax
+  zMin: number = 10,
+  zMax: number = 25,
+  centerZ: number = 17,
+  sigmaZ: number = 3.0
 ): Peak[] {
   const peaks: Peak[] = [];
+  const safeSigma = Math.max(0.5, sigmaZ);
+  
   for (let z = zMin; z <= zMax; z++) {
-    const mz = calculateObservedMz(preset.mass, z, adductMass);
-    // Gaussian envelope abundance
-    const abundance = Math.exp(-Math.pow(z - preset.centerZ, 2) / (2 * Math.pow(preset.sigmaZ, 2)));
+    const mz = calculateObservedMz(mass, z, adductMass);
+    const exponent = -Math.pow(z - centerZ, 2) / (2 * Math.pow(safeSigma, 2));
+    const abundance = Math.exp(Math.max(-20, exponent));
     peaks.push({
       id: `peak-z${z}`,
       z,
       mz,
-      abundance: Math.max(0.05, abundance),
+      abundance: Math.max(0.04, Math.min(1.0, abundance)),
       label: `+${z}`,
     });
   }
