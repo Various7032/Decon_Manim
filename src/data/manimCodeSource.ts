@@ -329,16 +329,20 @@ class ESIDeconvolutionScene(MovingCameraScene):
             if calc_m < 0 or calc_m > 75000:
                 continue
 
-            is_true_match = (z_t == 25)
-            rad = 0.10 if is_true_match else 0.08
+            is_true_match = (z_t == first_peak["z"])
+            is_half_match = (first_peak["z"] % 2 == 0 and z_t == first_peak["z"] // 2)
+            is_double_match = (z_t == first_peak["z"] * 2)
+            rad = 0.10 if is_true_match else (0.085 if (is_half_match or is_double_match) else 0.07)
 
             # All tokens start as Coral spheres dropped from peak apex
             tok = Dot(p1_apex, radius=rad, color=COLOR_CORAL)
             
             if is_true_match:
                 target_pos = axes_mass.c2p(24000, 0.9)
-            elif abs(calc_m - 12000) < 600:
+            elif is_half_match:
                 target_pos = axes_mass.c2p(12000, 0.7)
+            elif is_double_match:
+                target_pos = axes_mass.c2p(48000, 0.7)
             else:
                 target_pos = axes_mass.c2p(calc_m, 0.4 + np.random.uniform(0.1, 0.5))
 
@@ -374,8 +378,8 @@ class ESIDeconvolutionScene(MovingCameraScene):
             p_top = axes_mz.c2p(peak["mz"], peak["abundance"])
             true_z = peak["z"]
 
-            # Test all candidate charges z_test in range [6, 32]
-            for z_test in range(6, 33):
+            # Test all candidate charges z_test in range [4, 32]
+            for z_test in range(4, 33):
                 calc_m = (peak["mz"] - PROTON_MASS) * z_test
                 if calc_m < 0 or calc_m > 75000:
                     continue
