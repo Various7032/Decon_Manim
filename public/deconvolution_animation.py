@@ -1,6 +1,6 @@
 """
 Manim Animation Script: Charge-State Deconvolution in ESI Mass Spectrometry
-Compatible with Manim Community Edition v0.18.0+
+Compatible with Manim Community Edition v0.18.0 - v0.20+
 
 Usage:
     manim -pql deconvolution_animation.py ESIDeconvolutionScene   (Low Quality Preview)
@@ -20,9 +20,9 @@ COLOR_AXIS = "#64748b"
 COLOR_GRID = "#27272a"
 COLOR_CYAN = "#06b6d4"       # Raw ESI Peaks
 COLOR_CYAN_LIGHT = "#67e8f9"
-COLOR_CORAL = "#f43f5e"      # Trial hypothesis Token
+COLOR_CORAL = "#f43f5e"      # Trial / Non-converging Tokens
 COLOR_CORAL_LIGHT = "#fda4af"
-COLOR_GOLD = "#eab308"       # Theoretical True Mass (eg 24,000 Da)
+COLOR_GOLD = "#eab308"       # Converged True Mass (24,000 Da)
 COLOR_GOLD_LIGHT = "#fef08a"
 COLOR_TEXT_MUTED = "#94a3b8"
 COLOR_TEXT_BRIGHT = "#f8fafc"
